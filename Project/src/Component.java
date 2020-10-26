@@ -1,15 +1,19 @@
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class Component {
 
 	private int id;
 	private String name;
-	private int quantity; // maybe put this somewhere else
+	private int quantity;
+	private ArrayList<Integer> suppliers;
 
-	public Component(String name) {
+	public Component(String name, int id) {
 		this.setName(name);
-		this.setId(this.generateId());
-		this.quantity = 0;
+		this.setId(id);
+		this.setQuantity(0);
+		this.suppliers = new ArrayList<Integer>();
 	}
 
 	public int getId() {
@@ -27,15 +31,37 @@ public class Component {
 	}
 
 	public void setId(int id) {
-		if (id != 0) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
-	private int generateId() {
-		int id = 0;
-		// TODO: Generate the id
-		return id;
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public boolean addSupplier(int supplierId) {
+		if (!this.suppliers.contains(supplierId)) {
+			this.suppliers.add(supplierId);
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean removeSupplier(int supplierId) {
+		if (this.suppliers.contains(supplierId)) {
+			this.suppliers.remove(supplierId);
+			return true;
+		}
+
+		return false;
+	}
+
+	public Iterator<Integer> getSuppliers() {
+		return suppliers.iterator();
 	}
 
 	@Override
@@ -58,4 +84,5 @@ public class Component {
 	public String toString() {
 		return this.getId() + " " + this.getName();
 	}
+
 }

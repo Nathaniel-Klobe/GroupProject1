@@ -1,13 +1,16 @@
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class Supplier {
 
 	private int id;
 	private String name;
+	private ArrayList<Integer> components;
 
 	public Supplier(String name) {
 		this.setName(name);
-		this.setId(this.generateId());
+		this.components = new ArrayList<Integer>();
 	}
 
 	public int getId() {
@@ -30,10 +33,26 @@ public class Supplier {
 		}
 	}
 
-	private int generateId() {
-		int id = 0;
-		// TODO: Generate the id
-		return id;
+	public boolean addComponent(int componentId) {
+		if (!this.components.contains(componentId)) {
+			this.components.add(componentId);
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean removeComponent(int componentId) {
+		if (this.components.contains(componentId)) {
+			this.components.remove(componentId);
+			return true;
+		}
+
+		return false;
+	}
+
+	public Iterator<Integer> getComponents() {
+		return this.components.iterator();
 	}
 
 	@Override
