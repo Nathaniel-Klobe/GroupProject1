@@ -6,11 +6,12 @@ public class Supplier {
 
 	private int id;
 	private String name;
-	private ArrayList<Integer> components;
+	private ArrayList<Component> components;
 
-	public Supplier(String name) {
+	public Supplier(String name, int id) {
 		this.setName(name);
-		this.components = new ArrayList<Integer>();
+		this.components = new ArrayList<Component>();
+		this.setId(id);
 	}
 
 	public int getId() {
@@ -22,20 +23,16 @@ public class Supplier {
 	}
 
 	public void setName(String name) {
-		if (name != null) {
 			this.name = name;
-		}
 	}
 
 	public void setId(int id) {
-		if (id != 0) {
 			this.id = id;
-		}
 	}
 
-	public boolean addComponent(int componentId) {
-		if (!this.components.contains(componentId)) {
-			this.components.add(componentId);
+	public boolean addComponent(Component component) {
+		if (!this.components.contains(component)) {
+			this.components.add(component);
 			return true;
 		}
 
@@ -51,9 +48,10 @@ public class Supplier {
 		return false;
 	}
 
-	public Iterator<Integer> getComponents() {
+	public Iterator<Component> getComponents() {
 		return this.components.iterator();
 	}
+	
 
 	@Override
 	public boolean equals(Object obj) {

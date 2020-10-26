@@ -62,11 +62,25 @@ public class OrderList {
 
 		while (iter.hasNext()) {
 			if (iter.next().getOrderId() == orderId) {
-				iter.next().setFullfilled(true);
+				iter.next().setFulfilled(true);
 				return true;
 			}
 		}
 
 		return false;
+	}
+	
+	public Iterator<Order> getOutstandingOrders(){
+		ArrayList<Order> outstandingOrders = new ArrayList<Order>();
+		
+		Iterator<Order> iter = this.orders.iterator();
+		
+		while(iter.hasNext()) {
+			if(iter.next().getFullfilled() == false) {
+				outstandingOrders.add(iter.next());
+			}
+		}
+		
+		return outstandingOrders.iterator();
 	}
 }

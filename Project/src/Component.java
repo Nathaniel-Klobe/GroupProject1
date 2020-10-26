@@ -7,13 +7,13 @@ public class Component {
 	private int id;
 	private String name;
 	private int quantity;
-	private ArrayList<Integer> suppliers;
+	private ArrayList<Supplier> suppliers;
 
 	public Component(String name, int id) {
 		this.setName(name);
 		this.setId(id);
 		this.setQuantity(0);
-		this.suppliers = new ArrayList<Integer>();
+		this.suppliers = new ArrayList<Supplier>();
 	}
 
 	public int getId() {
@@ -42,9 +42,9 @@ public class Component {
 		this.quantity = quantity;
 	}
 
-	public boolean addSupplier(int supplierId) {
-		if (!this.suppliers.contains(supplierId)) {
-			this.suppliers.add(supplierId);
+	public boolean addSupplier(Supplier supplier) {
+		if (!this.suppliers.contains(supplier)) {
+			this.suppliers.add(supplier);
 			return true;
 		}
 
@@ -60,7 +60,7 @@ public class Component {
 		return false;
 	}
 
-	public Iterator<Integer> getSuppliers() {
+	public Iterator<Supplier> getSuppliers() {
 		return suppliers.iterator();
 	}
 

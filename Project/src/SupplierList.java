@@ -56,5 +56,9 @@ public class SupplierList {
 
 		return false;
 	}
+	
+	public Iterator<Supplier> getSuppliers() {
+		return this.suppliers.iterator();
+	}
 
 }

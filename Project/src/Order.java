@@ -5,13 +5,13 @@ public class Order {
 	private int supplierId;
 	private int componentId;
 	private int quantity;
-	private boolean fullfilled;
+	private boolean fulfilled;
 
 	public Order(int supplierId, int componentId, int quantity) {
 		this.setSupplierId(supplierId);
 		this.setComponentId(componentId);
 		this.setQuantity(quantity);
-		this.setFullfilled(false);
+		this.setFulfilled(false);
 		this.setOrderId(this.generateId());
 	}
 
@@ -32,7 +32,7 @@ public class Order {
 	}
 
 	public boolean getFullfilled() {
-		return this.fullfilled;
+		return this.fulfilled;
 	}
 
 	public void setOrderId(int id) {
@@ -54,8 +54,15 @@ public class Order {
 		// throw error
 	}
 
-	public void setFullfilled(boolean fullfilled) {
-		this.fullfilled = fullfilled;
+	public void setFulfilled(boolean fulfilled) {
+		this.fulfilled = fulfilled;
+	}
+	
+	public String toString() {
+		//toString
+		String output = "";
+		
+		return output;
 	}
 
 	private int generateId() {

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class ComponentList {
 
@@ -56,5 +57,30 @@ public class ComponentList {
 		}
 
 		return false;
+	}
+	
+	public Iterator<Component> getComponents(){
+		return this.components.iterator();
+	}
+	
+	private int generateId() {
+		
+		while(true) {
+			boolean exists = false;
+			Random rand = new Random();
+			int id = rand.nextInt();
+			
+			Iterator<Component> iter = this.components.iterator();
+			while(iter.hasNext()) {
+				if(iter.next().getId() == id) {
+					exists = true;
+				}
+			}
+			
+			if(exists == false) {
+				return id;
+			}
+		}
+	
 	}
 }
