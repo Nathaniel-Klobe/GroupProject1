@@ -10,14 +10,11 @@ public class ComponentList {
 		this.components = new ArrayList<Component>();
 	}
 
-	public boolean addComponent(Component component) {
+	public void addComponent(String name) {
 
-		if (component != null && this.components.contains(component) != true) {
-			this.components.add(component);
-			return true;
-		}
+		Component component = new Component(name, this.generateId());
+		this.components.add(component);
 
-		return false;
 	}
 
 	public Component getComponent(int id) {
@@ -45,42 +42,28 @@ public class ComponentList {
 		return false;
 	}
 
-	public boolean editComponent(int id, Component component) {
-		Iterator<Component> iter = this.components.iterator();
-
-		while (iter.hasNext()) {
-			if (iter.next().getId() == id) {
-				this.components.remove(iter.next());
-				this.components.add(component);
-				return true;
-			}
-		}
-
-		return false;
-	}
-	
-	public Iterator<Component> getComponents(){
+	public Iterator<Component> getComponents() {
 		return this.components.iterator();
 	}
-	
+
 	private int generateId() {
-		
-		while(true) {
+
+		while (true) {
 			boolean exists = false;
 			Random rand = new Random();
 			int id = rand.nextInt();
-			
+
 			Iterator<Component> iter = this.components.iterator();
-			while(iter.hasNext()) {
-				if(iter.next().getId() == id) {
+			while (iter.hasNext()) {
+				if (iter.next().getId() == id) {
 					exists = true;
 				}
 			}
-			
-			if(exists == false) {
+
+			if (exists == false) {
 				return id;
 			}
 		}
-	
+
 	}
 }

@@ -23,11 +23,11 @@ public class Supplier {
 	}
 
 	public void setName(String name) {
-			this.name = name;
+		this.name = name;
 	}
 
 	public void setId(int id) {
-			this.id = id;
+		this.id = id;
 	}
 
 	public boolean addComponent(Component component) {
@@ -39,9 +39,9 @@ public class Supplier {
 		return false;
 	}
 
-	public boolean removeComponent(int componentId) {
-		if (this.components.contains(componentId)) {
-			this.components.remove(componentId);
+	public boolean removeComponent(Component component) {
+		if (this.components.contains(component)) {
+			this.components.remove(component);
 			return true;
 		}
 
@@ -51,7 +51,6 @@ public class Supplier {
 	public Iterator<Component> getComponents() {
 		return this.components.iterator();
 	}
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -71,6 +70,6 @@ public class Supplier {
 
 	@Override
 	public String toString() {
-		return this.getId() + " " + this.getName();
+		return this.getId() + " " + this.getName() + "\n";
 	}
 }

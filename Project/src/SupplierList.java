@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class SupplierList {
 
@@ -9,13 +10,9 @@ public class SupplierList {
 		this.suppliers = new ArrayList<Supplier>();
 	}
 
-	public boolean addSupplier(Supplier supplier) {
-		if (supplier != null && this.suppliers.contains(supplier) != true) {
-			this.suppliers.add(supplier);
-			return true;
-		}
-
-		return false;
+	public void addSupplier(String name) {
+		Supplier supplier = new Supplier(name, this.generateId());
+		this.suppliers.add(supplier);
 	}
 
 	public Supplier getSupplier(int id) {
@@ -56,9 +53,30 @@ public class SupplierList {
 
 		return false;
 	}
-	
+
 	public Iterator<Supplier> getSuppliers() {
 		return this.suppliers.iterator();
+	}
+
+	private int generateId() {
+
+		while (true) {
+			boolean exists = false;
+			Random rand = new Random();
+			int id = rand.nextInt();
+
+			Iterator<Supplier> iter = this.suppliers.iterator();
+			while (iter.hasNext()) {
+				if (iter.next().getId() == id) {
+					exists = true;
+				}
+			}
+
+			if (exists == false) {
+				return id;
+			}
+		}
+
 	}
 
 }

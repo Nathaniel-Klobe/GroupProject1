@@ -51,9 +51,9 @@ public class Component {
 		return false;
 	}
 
-	public boolean removeSupplier(int supplierId) {
-		if (this.suppliers.contains(supplierId)) {
-			this.suppliers.remove(supplierId);
+	public boolean removeSupplier(Supplier supplier) {
+		if (this.suppliers.contains(supplier)) {
+			this.suppliers.remove(supplier);
 			return true;
 		}
 
@@ -82,7 +82,7 @@ public class Component {
 
 	@Override
 	public String toString() {
-		return this.getId() + " " + this.getName();
+		return this.getId() + " " + this.getName() + "\n";
 	}
 
 }
