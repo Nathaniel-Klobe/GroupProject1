@@ -1,18 +1,21 @@
+import java.io.Serializable;
+import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int orderId;
 	private int supplierId;
 	private int componentId;
 	private int quantity;
-	private boolean fullfilled;
+	private boolean fulfilled;
 
 	public Order(int supplierId, int componentId, int quantity) {
 		this.setSupplierId(supplierId);
 		this.setComponentId(componentId);
 		this.setQuantity(quantity);
-		this.setFullfilled(false);
-		this.setOrderId(this.generateId());
+		this.setFulfilled(false);
+		this.setOrderId(IdServer.instance().getOrderId());
 	}
 
 	public int getOrderId() {
@@ -32,7 +35,7 @@ public class Order {
 	}
 
 	public boolean getFullfilled() {
-		return this.fullfilled;
+		return this.fulfilled;
 	}
 
 	public void setOrderId(int id) {
@@ -54,13 +57,34 @@ public class Order {
 		// throw error
 	}
 
-	public void setFullfilled(boolean fullfilled) {
-		this.fullfilled = fullfilled;
+	public void setFulfilled(boolean fulfilled) {
+		this.fulfilled = fulfilled;
 	}
 
-	private int generateId() {
-		int id = 0;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		Order order = (Order) obj;
 
-		return id;
+		return Objects.equals(this.orderId, order.getOrderId())
+				&& Objects.equals(this.componentId, order.getComponentId())
+				&& Objects.equals(this.supplierId, order.getSupplierId())
+				&& Objects.equals(this.quantity, order.getQuantity())
+				&& Objects.equals(this.fulfilled, order.getFullfilled());
 	}
+
+	public String toString() {
+
+		return "ComponentId: " + this.componentId + " SupplierId: " + this.supplierId + " OrderId: " + this.orderId
+				+ " Quantity: " + this.quantity + "\n";
+	}
+
 }

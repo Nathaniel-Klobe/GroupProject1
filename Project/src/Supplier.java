@@ -1,13 +1,19 @@
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
-public class Supplier {
+public class Supplier implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
+	private ArrayList<Component> components;
 
 	public Supplier(String name) {
 		this.setName(name);
-		this.setId(this.generateId());
+		this.components = new ArrayList<Component>();
+		this.setId(IdServer.instance().getSupplierId());
 	}
 
 	public int getId() {
@@ -19,21 +25,33 @@ public class Supplier {
 	}
 
 	public void setName(String name) {
-		if (name != null) {
-			this.name = name;
-		}
+		this.name = name;
 	}
 
 	public void setId(int id) {
-		if (id != 0) {
-			this.id = id;
-		}
+		this.id = id;
 	}
 
-	private int generateId() {
-		int id = 0;
-		// TODO: Generate the id
-		return id;
+	public boolean addComponent(Component component) {
+		if (!this.components.contains(component)) {
+			this.components.add(component);
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean removeComponent(Component component) {
+		if (this.components.contains(component)) {
+			this.components.remove(component);
+			return true;
+		}
+
+		return false;
+	}
+
+	public Iterator<Component> getComponents() {
+		return this.components.iterator();
 	}
 
 	@Override
@@ -54,6 +72,6 @@ public class Supplier {
 
 	@Override
 	public String toString() {
-		return this.getId() + " " + this.getName();
+		return this.getId() + " " + this.getName() + "\n";
 	}
 }
