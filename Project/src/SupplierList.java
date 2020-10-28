@@ -1,82 +1,51 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
-public class SupplierList {
+public class SupplierList implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Supplier> suppliers;
+	private static SupplierList instance = null;
 
-	public SupplierList() {
+	private SupplierList() {
 		this.suppliers = new ArrayList<Supplier>();
 	}
 
-	public void addSupplier(String name) {
-		Supplier supplier = new Supplier(name, this.generateId());
-		this.suppliers.add(supplier);
+	public static SupplierList instance() {
+		if (instance == null) {
+			return (instance = new SupplierList());
+		} else {
+			return instance;
+		}
 	}
 
-	public Supplier getSupplier(int id) {
-		Iterator<Supplier> iter = this.suppliers.iterator();
+	public boolean addSupplier(Supplier supplier) {
+		return this.suppliers.add(supplier);
+	}
 
-		while (iter.hasNext()) {
-			if (iter.next().getId() == id) {
-				return iter.next();
+	public Supplier search(int id) {
+		for (Iterator<Supplier> iter = this.suppliers.iterator(); iter.hasNext();) {
+			Supplier supplier = iter.next();
+			if (supplier.getId() == id) {
+				return supplier;
 			}
 		}
-
 		return null;
 	}
 
 	public boolean removeSupplier(int id) {
-		Iterator<Supplier> iter = this.suppliers.iterator();
+		Supplier supplier = this.search(id);
 
-		while (iter.hasNext()) {
-			if (iter.next().getId() == id) {
-				this.suppliers.remove(iter.next());
-				return true;
-			}
+		if (supplier == null) {
+			return false;
+		} else {
+			return this.suppliers.remove(supplier);
 		}
-
-		return false;
-	}
-
-	public boolean editSupplier(int id, Supplier supplier) {
-		Iterator<Supplier> iter = this.suppliers.iterator();
-
-		while (iter.hasNext()) {
-			if (iter.next().getId() == id) {
-				this.suppliers.remove(iter.next());
-				this.suppliers.add(supplier);
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public Iterator<Supplier> getSuppliers() {
 		return this.suppliers.iterator();
-	}
-
-	private int generateId() {
-
-		while (true) {
-			boolean exists = false;
-			Random rand = new Random();
-			int id = rand.nextInt();
-
-			Iterator<Supplier> iter = this.suppliers.iterator();
-			while (iter.hasNext()) {
-				if (iter.next().getId() == id) {
-					exists = true;
-				}
-			}
-
-			if (exists == false) {
-				return id;
-			}
-		}
-
 	}
 
 }

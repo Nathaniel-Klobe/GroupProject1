@@ -1,104 +1,69 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
-public class OrderList {
+public class OrderList implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Order> orders;
+	private static OrderList instance = null;
 
-	public OrderList() {
+	private OrderList() {
 		this.orders = new ArrayList<Order>();
 	}
 
-	public void addOrder(int componentId, int supplierId, int quantity) {
-		Order order = new Order(componentId, supplierId, quantity, this.generateId());
-		this.orders.add(order);
+	public static OrderList instance() {
+		if (instance == null) {
+			return (instance = new OrderList());
+		} else {
+			return instance;
+		}
 	}
 
-	public Order getOrder(int orderId) {
-		Iterator<Order> iter = this.orders.iterator();
+	public boolean addOrder(Order order) {
+		return this.orders.add(order);
+	}
 
-		while (iter.hasNext()) {
-			if (iter.next().getOrderId() == orderId) {
-				return iter.next();
+	public Order search(int orderId) {
+		for (Iterator<Order> iter = this.orders.iterator(); iter.hasNext();) {
+			Order order = iter.next();
+			if (order.getOrderId() == orderId) {
+				return order;
 			}
 		}
-
 		return null;
 	}
 
 	public boolean removeOrder(int orderId) {
-		Iterator<Order> iter = this.orders.iterator();
-
-		while (iter.hasNext()) {
-			if (iter.next().getOrderId() == orderId) {
-				this.orders.remove(iter.next());
-				return true;
-			}
+		Order order = this.search(orderId);
+		if (order == null) {
+			return false;
+		} else {
+			return this.orders.remove(order);
 		}
-
-		return false;
-	}
-
-	public boolean editOrder(int orderId, Order order) {
-		Iterator<Order> iter = this.orders.iterator();
-
-		while (iter.hasNext()) {
-			if (iter.next().getOrderId() == orderId) {
-				this.orders.remove(iter.next());
-				this.orders.add(order);
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public boolean fullfillOrder(int orderId) {
-		Iterator<Order> iter = this.orders.iterator();
-
-		while (iter.hasNext()) {
-			if (iter.next().getOrderId() == orderId) {
-				iter.next().setFulfilled(true);
-				return true;
-			}
+		Order order = this.search(orderId);
+		if (order == null) {
+			return false;
+		} else {
+			order.setFulfilled(true);
+			return true;
 		}
-
-		return false;
 	}
 
 	public Iterator<Order> getOutstandingOrders() {
 		ArrayList<Order> outstandingOrders = new ArrayList<Order>();
 
-		Iterator<Order> iter = this.orders.iterator();
-
-		while (iter.hasNext()) {
-			if (iter.next().getFullfilled() == false) {
-				outstandingOrders.add(iter.next());
+		for (Iterator<Order> iter = this.orders.iterator(); iter.hasNext();) {
+			Order order = iter.next();
+			if (order.getFullfilled() == false) {
+				outstandingOrders.add(order);
 			}
 		}
 
 		return outstandingOrders.iterator();
 	}
 
-	private int generateId() {
-
-		while (true) {
-			boolean exists = false;
-			Random rand = new Random();
-			int id = rand.nextInt();
-
-			Iterator<Order> iter = this.orders.iterator();
-			while (iter.hasNext()) {
-				if (iter.next().getOrderId() == id) {
-					exists = true;
-				}
-			}
-
-			if (exists == false) {
-				return id;
-			}
-		}
-
-	}
 }

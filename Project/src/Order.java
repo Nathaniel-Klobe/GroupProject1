@@ -1,19 +1,21 @@
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int orderId;
 	private int supplierId;
 	private int componentId;
 	private int quantity;
 	private boolean fulfilled;
 
-	public Order(int supplierId, int componentId, int quantity, int orderId) {
+	public Order(int supplierId, int componentId, int quantity) {
 		this.setSupplierId(supplierId);
 		this.setComponentId(componentId);
 		this.setQuantity(quantity);
 		this.setFulfilled(false);
-		this.setOrderId(orderId);
+		this.setOrderId(IdServer.instance().getOrderId());
 	}
 
 	public int getOrderId() {

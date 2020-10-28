@@ -3,239 +3,225 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 
-public class Business {
+public class Business implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	public static final int COMPONENT_ID_ERROR = 1;
+	public static final int SUPPLIER_ID_ERROR = 2;
+	public static final int ORDER_ID_ERROR = 3;
+	public static final int ORDER_ALREADY_FULFILLED = 4;
+	public static final int QUANTITY_ERROR = 5;
+	public static final int OPERATION_COMPLETED = 6;
+	public static final int OPERATION_FAILED = 7;
+	public static final int COMPONENT_NOT_FOUND = 8;
 	private ComponentList componentCatalog;
 	private SupplierList supplierCatalog;
 	private OrderList orderCatalog;
 
-	private static Business instance = null;
+	private static Business business = null;
 
 	private Business() {
-		this.componentCatalog = new ComponentList();
-		this.supplierCatalog = new SupplierList();
-		this.orderCatalog = new OrderList();
+		componentCatalog = ComponentList.instance();
+		supplierCatalog = SupplierList.instance();
+		orderCatalog = OrderList.instance();
 	}
 
-	public static Business getInstance() {
-		if (instance == null) {
-			instance = new Business();
+	public static Business instance() {
+		if (business == null) {
+			IdServer.instance(); // instantiate all singletons
+			return (business = new Business());
 		}
 
-		return instance;
+		return business;
 	}
 
 	// add Component
-	public String addComponent(String name) {
-		if (name.isEmpty()) {
-			return "Name is blank";
+	public Component addComponent(String name) {
+		Component component = new Component(name);
+		if (componentCatalog.addComponent(component)) {
+			return component;
 		}
-		this.componentCatalog.addComponent(name);
-
-		return "Component Added";
-
+		return null;
 	}
 
 	// add Supplier
-	public String addSupplier(String name) {
-		if (name.isEmpty()) {
-			return "Name is blank";
+	public Supplier addSupplier(String name) {
+		Supplier supplier = new Supplier(name);
+		if (supplierCatalog.addSupplier(supplier)) {
+			return supplier;
 		}
-		this.supplierCatalog.addSupplier(name);
-
-		return "Supplier Added";
+		return null;
 	}
 
 	// add Component Supplier
-	public String addComponentSupplier(int componentId, int supplierId) {
-		Component component = this.componentCatalog.getComponent(componentId);
-		Supplier supplier = this.supplierCatalog.getSupplier(supplierId);
+	public int addComponentSupplier(int componentId, int supplierId) {
+		Component component = componentCatalog.search(componentId);
+		Supplier supplier = supplierCatalog.search(supplierId);
 
 		if (component == null) {
-			return "Component Id is bad.";
+			return COMPONENT_ID_ERROR;
 		}
 
 		if (supplier == null) {
-			return "Supplier Id is bad.";
+			return SUPPLIER_ID_ERROR;
 		}
 
 		// Create the relationship
 		component.addSupplier(supplier);
 		supplier.addComponent(component);
 
-		return "Component/Supplier Relationship Created.";
+		return OPERATION_COMPLETED;
 	}
 
 	// assign component to product
-	public String assignComponent(int componentId, int quantity) {
-		Component component = this.componentCatalog.getComponent(componentId);
+	public int assignComponent(int componentId, int quantity) {
+		Component component = this.componentCatalog.search(componentId);
 
 		if (quantity <= 0) {
-			return "Quantity is zero or less.";
+			return QUANTITY_ERROR;
 		}
 
 		if (component == null) {
-			return "Component Id is bad.";
+			return COMPONENT_NOT_FOUND;
 		}
 
 		component.setQuantity(component.getQuantity() - quantity);
 
-		return component.toString();
+		return OPERATION_COMPLETED;
 	}
 
 	// order components
-	public String placeOrder(int componentId, int supplierId, int quantity) {
-
-		if (this.componentCatalog.getComponent(componentId) == null) {
-			return "The Component Id is bad.";
+	public Order placeOrder(int componentId, int supplierId, int quantity) {
+		Order order = new Order(componentId, supplierId, quantity);
+		if (orderCatalog.addOrder(order)) {
+			return order;
 		}
-
-		if (this.supplierCatalog.getSupplier(supplierId) == null) {
-			return "The Supplier Id is bad.";
-		}
-
-		if (quantity <= 0) {
-			return "The quantity is zero or lower.";
-		}
-
-		this.orderCatalog.addOrder(componentId, supplierId, quantity);
-
-		return "Order successfully created.";
+		return null;
 
 	}
 
 	// order fulfilled
-	public String fulfillOrder(int orderId) {
-		Order order = this.orderCatalog.getOrder(orderId);
+	public int fulfillOrder(int orderId) {
+		Order order = orderCatalog.search(orderId);
 
 		if (order == null) {
-			return "The Order Id is bad.";
+			return ORDER_ID_ERROR;
 		}
 
 		if (order.getFullfilled() == true) {
-			return "That Order is already fulfilled.";
+			return ORDER_ALREADY_FULFILLED;
 		}
 
 		order.setFulfilled(true);
 
-		return "The Order was marked as fulfilled.";
+		return OPERATION_COMPLETED;
 	}
 
 	// list component with its suppliers
-	public String listComponent(int componentId) {
-		Component component = this.componentCatalog.getComponent(componentId);
+	public int listComponent(int componentId) {
+		Component component = this.componentCatalog.search(componentId);
 
 		if (component == null) {
-			return "The Component Id is bad.";
+			return COMPONENT_ID_ERROR;
 		}
 
 		Iterator<Supplier> iter = component.getSuppliers();
-		String suppliersString = "";
+		String suppliersString = iter.toString();
 
-		while (iter.hasNext()) {
-			suppliersString += iter.next().toString();
-		}
+		System.out.println(component.toString() + suppliersString);
 
-		return component.toString() + suppliersString;
+		return OPERATION_COMPLETED;
 	}
 
 	// list supplier with it components
-	public String listSupplier(int supplierId) {
-		Supplier supplier = this.supplierCatalog.getSupplier(supplierId);
+	public int listSupplier(int supplierId) {
+		Supplier supplier = this.supplierCatalog.search(supplierId);
 
 		if (supplier == null) {
-			return "The Supplier Id is bad.";
+			return SUPPLIER_ID_ERROR;
 		}
 
 		Iterator<Component> iter = supplier.getComponents();
-		String componentsString = "";
+		String componentsString = iter.toString();
 
-		while (iter.hasNext()) {
-			componentsString += iter.next().toString();
-		}
+		System.out.println(supplier.toString() + componentsString);
 
-		return supplier.toString() + componentsString;
+		return OPERATION_COMPLETED;
 	}
 
 	// display outstanding orders
-	public String displayOutstandingOrders() {
-		String outstandingString = "";
-
+	public int displayOutstandingOrders() {
 		Iterator<Order> iter = this.orderCatalog.getOutstandingOrders();
 
-		while (iter.hasNext()) {
-			outstandingString += iter.next().toString();
-		}
+		String outstandingString = iter.toString();
 
-		return outstandingString;
+		System.out.println(outstandingString);
+
+		return OPERATION_COMPLETED;
 	}
 
 	// display all components
-	public String displayComponents() {
-		String componentsString = "";
-
+	public int displayComponents() {
 		Iterator<Component> iter = this.componentCatalog.getComponents();
 
-		while (iter.hasNext()) {
-			componentsString += iter.next().toString();
-		}
+		String componentsString = iter.toString();
 
-		return componentsString;
+		System.out.println(componentsString);
+
+		return OPERATION_COMPLETED;
 	}
 
 	// display all suppliers
-	public String displaySuppliers() {
-		String suppliersString = "";
+	public int displaySuppliers() {
 
 		Iterator<Supplier> iter = this.supplierCatalog.getSuppliers();
 
-		while (iter.hasNext()) {
-			suppliersString += iter.next().toString();
-		}
+		String suppliersString = iter.toString();
 
-		return suppliersString;
+		System.out.println(suppliersString);
+
+		return OPERATION_COMPLETED;
 	}
 
-	public String saveData() {
+	public static boolean save() {
 
 		try {
-			FileOutputStream file = new FileOutputStream("/Data/business.ser");
+			FileOutputStream file = new FileOutputStream("BusinessData");
 
 			ObjectOutputStream out = new ObjectOutputStream(file);
 
-			out.writeObject(this.componentCatalog);
-			out.writeObject(this.supplierCatalog);
-			out.writeObject(this.orderCatalog);
+			out.writeObject(business);
+			out.writeObject(IdServer.instance());
 			out.close();
 			file.close();
-			return "Successfully saved data.";
+			return true;
 		} catch (IOException i) {
 			i.printStackTrace();
+			return false;
 		}
 
-		return "All Done.";
 	}
 
-	public String loadData() {
+	public static Business retreive() {
 
 		try {
-			FileInputStream file = new FileInputStream("/Data/business.ser");
+			FileInputStream file = new FileInputStream("BusinessData");
 			ObjectInputStream in = new ObjectInputStream(file);
 
-			this.componentCatalog = (ComponentList) in.readObject();
-			this.supplierCatalog = (SupplierList) in.readObject();
-			this.orderCatalog = (OrderList) in.readObject();
+			business = (Business) in.readObject();
+			IdServer.retrieve(in);
 
 			in.close();
 			file.close();
 
-			return "Successfully read data.";
+			return business;
 
 		} catch (ClassNotFoundException | IOException c) {
 			c.printStackTrace();
-			return "Unable to load data.";
+			return null;
 		}
 
 	}

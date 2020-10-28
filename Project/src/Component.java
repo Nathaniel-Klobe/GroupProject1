@@ -1,17 +1,19 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class Component {
+public class Component implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private int quantity;
 	private ArrayList<Supplier> suppliers;
 
-	public Component(String name, int id) {
+	public Component(String name) {
 		this.setName(name);
-		this.setId(id);
+		this.setId(IdServer.instance().getComponentId());
 		this.setQuantity(0);
 		this.suppliers = new ArrayList<Supplier>();
 	}

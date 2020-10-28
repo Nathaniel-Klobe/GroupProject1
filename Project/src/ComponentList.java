@@ -1,28 +1,34 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
-public class ComponentList {
+public class ComponentList implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Component> components;
+	private static ComponentList componentList = null;
 
-	public ComponentList() {
+	private ComponentList() {
 		this.components = new ArrayList<Component>();
 	}
 
-	public void addComponent(String name) {
-
-		Component component = new Component(name, this.generateId());
-		this.components.add(component);
-
+	public static ComponentList instance() {
+		if (componentList == null) {
+			return (componentList = new ComponentList());
+		} else {
+			return componentList;
+		}
 	}
 
-	public Component getComponent(int id) {
-		Iterator<Component> iter = this.components.iterator();
+	public boolean addComponent(Component component) {
+		return this.components.add(component);
+	}
 
-		while (iter.hasNext()) {
-			if (iter.next().getId() == id) {
-				return iter.next();
+	public Component search(int id) {
+		for (Iterator<Component> iter = this.components.iterator(); iter.hasNext();) {
+			Component component = (Component) iter.next();
+			if (component.getId() == id) {
+				return component;
 			}
 		}
 
@@ -30,40 +36,23 @@ public class ComponentList {
 	}
 
 	public boolean removeComponent(int id) {
-		Iterator<Component> iter = this.components.iterator();
+		Component component = this.search(id);
+		if (component == null) {
+			return false;
+		} else {
+			return this.components.remove(component);
 
-		while (iter.hasNext()) {
-			if (iter.next().getId() == id) {
-				this.components.remove(iter.next());
-				return true;
-			}
 		}
 
-		return false;
 	}
 
 	public Iterator<Component> getComponents() {
 		return this.components.iterator();
 	}
 
-	private int generateId() {
-
-		while (true) {
-			boolean exists = false;
-			Random rand = new Random();
-			int id = rand.nextInt();
-
-			Iterator<Component> iter = this.components.iterator();
-			while (iter.hasNext()) {
-				if (iter.next().getId() == id) {
-					exists = true;
-				}
-			}
-
-			if (exists == false) {
-				return id;
-			}
-		}
-
+	@Override
+	public String toString() {
+		return this.components.toString();
 	}
+
 }
