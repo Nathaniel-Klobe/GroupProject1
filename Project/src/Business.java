@@ -80,7 +80,7 @@ public class Business implements Serializable {
 	public int assignComponent(int componentId, int quantity) {
 		Component component = this.componentCatalog.search(componentId);
 
-		if (quantity <= 0) {
+		if (component.getQuantity() <= 0) {
 			return QUANTITY_ERROR;
 		}
 
@@ -99,6 +99,7 @@ public class Business implements Serializable {
 		if (orderCatalog.addOrder(order)) {
 			return order;
 		}
+
 		return null;
 
 	}
@@ -129,9 +130,11 @@ public class Business implements Serializable {
 		}
 
 		Iterator<Supplier> iter = component.getSuppliers();
-		String suppliersString = iter.toString();
+		System.out.println(component.getName() + " suppliers");
 
-		System.out.println(component.toString() + suppliersString);
+		while (iter.hasNext()) {
+			System.out.println(iter.next());
+		}
 
 		return OPERATION_COMPLETED;
 	}
@@ -145,45 +148,35 @@ public class Business implements Serializable {
 		}
 
 		Iterator<Component> iter = supplier.getComponents();
-		String componentsString = iter.toString();
+		System.out.println(supplier.getName() + " components");
 
-		System.out.println(supplier.toString() + componentsString);
+		while (iter.hasNext()) {
+			System.out.println(iter.next());
+		}
 
 		return OPERATION_COMPLETED;
 	}
 
 	// display outstanding orders
-	public int displayOutstandingOrders() {
+	public Iterator displayOutstandingOrders() {
 		Iterator<Order> iter = this.orderCatalog.getOutstandingOrders();
-
-		String outstandingString = iter.toString();
-
-		System.out.println(outstandingString);
-
-		return OPERATION_COMPLETED;
+		System.out.println("Outstanding Orders\n");
+		return iter;
 	}
 
 	// display all components
-	public int displayComponents() {
+	public Iterator displayComponents() {
 		Iterator<Component> iter = this.componentCatalog.getComponents();
-
-		String componentsString = iter.toString();
-
-		System.out.println(componentsString);
-
-		return OPERATION_COMPLETED;
+		System.out.println("Components\n");
+		return iter;
 	}
 
 	// display all suppliers
-	public int displaySuppliers() {
-
+	public Iterator displaySuppliers() {
 		Iterator<Supplier> iter = this.supplierCatalog.getSuppliers();
+		System.out.println("Suppliers\n");
 
-		String suppliersString = iter.toString();
-
-		System.out.println(suppliersString);
-
-		return OPERATION_COMPLETED;
+		return iter;
 	}
 
 	public static boolean save() {
