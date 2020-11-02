@@ -1,3 +1,4 @@
+
 /*
  * Group Project 1
  * Nate Klobe
@@ -10,16 +11,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class UserInterface {
 	private static UserInterface userInterface;
-	private BufferedReader reader = new BufferedReader(new InputStream(System.in));
+	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static Business business;
 	private static final int EXIT = 0;
 	private static final int ADD_COMPONENT = 1;
@@ -35,34 +32,35 @@ public class UserInterface {
 	private static final int DISPLAY_SUPPLIERS = 11;
 	private static final int SAVE = 12;
 	private static final int HELP = 13;
-	
+
 	/*
 	 * Private for singleton pattern. Conditionally looks for any saved data.
 	 * Otherwise, it gets a singleton Business object.
 	 */
 	private UserInterface() {
-		if(yesOrNo("Look for saved data and use it?") ) {
+		if (yesOrNo("Look for saved data and use it?")) {
 			retrieve();
 		} else {
 			business = Business.instance();
-			if(yesOrNo("Do you want to generate a test bed an invooked the functionality using asserts?")) {
-				new AutomatedTester(business);
+			if (yesOrNo("Do you want to generate a test bed an invooked the functionality using asserts?")) {
+				// new AutomatedTester(business);
 			}
 		}
 	}
-	
+
 	/*
 	 * Supports the singleton pattern
 	 * 
 	 * @return the singleton object
 	 */
 	public static UserInterface instance() {
-		if(userInterface == null) {
-			retrun userInterface = new UserInterface();
+		if (userInterface == null) {
+			return userInterface = new UserInterface();
 		} else {
 			return userInterface;
 		}
 	}
+
 	/**
 	 * Gets a token after prompting
 	 * 
@@ -84,7 +82,7 @@ public class UserInterface {
 			}
 		} while (true);
 	}
-	
+
 	/**
 	 * Queries for a yes or no and returns true for yes and false for no
 	 * 
@@ -99,7 +97,7 @@ public class UserInterface {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Converts the string to a number
 	 * 
@@ -118,27 +116,7 @@ public class UserInterface {
 			}
 		} while (true);
 	}
-	
-	/**
-	 * Prompts for a date and gets a date object
-	 * 
-	 * @param prompt the prompt
-	 * @return the data as a Calendar object
-	 */
-	public Calendar getDate(String prompt) {
-		do {
-			try {
-				Calendar date = new GregorianCalendar();
-				String item = getToken(prompt);
-				DateFormat dateFormat = SimpleDateFormat.getDateInstance(DateFormat.SHORT);
-				date.setTime(dateFormat.parse(item));
-				return date;
-			} catch (Exception fe) {
-				System.out.println("Please input a date as mm/dd/yy");
-			}
-		} while (true);
-	}
-	
+
 	/**
 	 * Prompts for a command from the keyboard
 	 * 
@@ -157,7 +135,7 @@ public class UserInterface {
 			}
 		} while (true);
 	}
-	
+
 	/**
 	 * Displays the help screen
 	 */
@@ -174,11 +152,11 @@ public class UserInterface {
 		System.out.println(LIST_SUPPLIER + " to list a supplier with its components");
 		System.out.println(DISPLAY_OUTSTANDING_ORDERS + " to display outstanding orders");
 		System.out.println(DISPLAY_COMPONENTS + " to display all components");
-		System.out.println(DISPLAY_SUPPLIERS + " to display all supplierss");
+		System.out.println(DISPLAY_SUPPLIERS + " to display all suppliers");
 		System.out.println(SAVE + " to save data");
 		System.out.println(HELP + " for help");
 	}
-	
+
 	/*
 	 * Method for adding components
 	 */
@@ -186,71 +164,157 @@ public class UserInterface {
 		String name = getToken("Enter component name");
 		Component result;
 		result = Business.instance().addComponent(name);
-		if(result == null) {
+		if (result == null) {
 			System.out.println("Could not add component");
 		}
 		System.out.println(result);
 	}
-	
+
 	/*
 	 * method for adding suppliers
 	 */
-	
+
 	public void addSupplier() {
 		String name = getToken("Enter supplier name");
 		Supplier result;
-		result = Business.instance.addSupplier(name);
-		if(result == null ) {
+		result = Business.instance().addSupplier(name);
+		if (result == null) {
 			System.out.println("Could not add supplier");
 		}
 		System.out.println(result);
 	}
-	
+
 	/*
-	 * method to add Compnent Supplier. Prompts user for Component id
-	 * and supplier id.
+	 * method to add Compnent Supplier. Prompts user for Component id and supplier
+	 * id.
 	 */
-	
+
 	public void addComponentSupplier() {
-		int componentID = getToken("Enter Compnent ID");
-		int supplierID = getToken("Enter Supplier ID");
-		int result = business.addComponentSupplier(componenID, supplierID);
-		Switch(result){
-			case Business.COMPONENT_ID_ERROR:
-				System.out.println("No such component");
-				break;
-			case Business.SUPPLIER_ID_ERROR:
-				System.out.println("No such supplier");
-				break;
-			case Business.OPERATION_COMPLETED:
-				System.out.println("Compnent Supplier added");
-				break;
-			default:
-				System.out.println("An error has occured");
+		int componentID = getNumber("Enter component id");
+		int supplierID = getNumber("Enter supplier id");
+		int result = business.addComponentSupplier(componentID, supplierID);
+		switch (result) {
+		case Business.COMPONENT_ID_ERROR:
+			System.out.println("No such component");
+			break;
+		case Business.SUPPLIER_ID_ERROR:
+			System.out.println("No such supplier");
+			break;
+		case Business.OPERATION_COMPLETED:
+			System.out.println("Component Supplier is added");
+			break;
+		default:
+			System.out.println("An error has occured");
 		}
 	}
-	
-	/*
-	
-	/*
-	 * 
-	 *
-	 * ADD METHODS:
-	 * 
-	 * assignComponent();
-	 * placeOrder();
-	 * fulfillOrder();
-	 * listComponent();
-	 * listSupplier();
-	 * displayOutstandingOrders();
-	 * displayComponents();
-	 * displaySuppliers();
-	 * 
+
+	/**
+	 * Method to update quanity of a component. Prompts user for component ID and
+	 * quantity.
 	 */
-	
-	
-	
-	
+
+	private void assignComponent() {
+		int componentID = getNumber("Enter component id");
+		int quantity = getNumber("Enter the quantity");
+		int result = business.assignComponent(componentID, quantity);
+		switch (result) {
+		case Business.QUANTITY_ERROR:
+			System.out.println("Quantity invalid");
+			break;
+		case Business.COMPONENT_NOT_FOUND:
+			System.out.println("No such component");
+			break;
+		case Business.OPERATION_COMPLETED:
+			System.out.println("Quantity updated");
+			break;
+		default:
+			System.out.println("An error has occured");
+		}
+	}
+
+	/*
+	 * Method to place orders. Prompts user for component id, quantity, and supplier
+	 * id.
+	 */
+	private void placeOrder() {
+		int componentID = getNumber("Enter component id");
+		int quantity = getNumber("Enter the quantity");
+		int supplierID = getNumber("Enter supplier id");
+		if (quantity <= 0) {
+			System.out.println("Quantity cannot be less than 0");
+		} else {
+			Order order = business.placeOrder(componentID, supplierID, quantity);
+		}
+
+	}
+
+	private void fulfillOrder() {
+		int orderID = getNumber("Enter order id");
+		int result = business.fulfillOrder(orderID);
+		switch (result) {
+		case Business.ORDER_ID_ERROR:
+			System.out.println("Invalid order");
+			break;
+		case Business.ORDER_ALREADY_FULFILLED:
+			System.out.println("Order already fulfilled");
+			break;
+		case Business.OPERATION_COMPLETED:
+			System.out.println("Order fulfilled");
+			break;
+		default:
+			System.out.println("An error has occured");
+		}
+
+	}
+
+	/*
+	 * List a component. The user enters a component id. If the component id is
+	 * valid, the system displays all the information related to the component,
+	 * including the names of suppliers for that component. Otherwise, it displays
+	 * an appropriate error message.
+	 */
+	private void listComponent() {
+		int componentID = getNumber("Enter component id");
+		int result = business.listComponent(componentID);
+		if (result == Business.COMPONENT_ID_ERROR) {
+			System.out.println("Invalid Component ID");
+		} else {
+			return;
+		}
+	}
+
+	private void listSupplier() {
+		int supplierID = getNumber("Enter component id");
+		int result = business.listSupplier(supplierID);
+		if (result == Business.COMPONENT_ID_ERROR) {
+			System.out.println("Invalid Supplier ID");
+		} else {
+			return;
+		}
+	}
+
+	private void displayOutStandingOrders() {
+		Iterator orders = business.displayOutstandingOrders();
+		while (orders.hasNext()) {
+			System.out.println(orders.next());
+		}
+	}
+
+	private void displayComponents() {
+		Iterator components = business.displayComponents();
+		while (components.hasNext()) {
+			System.out.println(components.next());
+		}
+
+	}
+
+	private void displaySuppliers() {
+		Iterator suppliers = business.displaySuppliers();
+		while (suppliers.hasNext()) {
+			System.out.println(suppliers.next());
+		}
+	}
+
 	/**
 	 * Method to be called for saving the Business object. Uses the appropriate
 	 * Business method for saving.
@@ -263,7 +327,7 @@ public class UserInterface {
 			System.out.println(" There has been an error in saving \n");
 		}
 	}
-	
+
 	/**
 	 * Method to be called for retrieving saved data. Uses the appropriate Business
 	 * method for retrieval.
@@ -272,7 +336,7 @@ public class UserInterface {
 	private void retrieve() {
 		try {
 			if (business == null) {
-				Business.retrieve();
+				Business.retreive();
 				if (business != null) {
 					System.out.println(" The business has been successfully retrieved from the file BusinessData \n");
 				} else {
@@ -284,7 +348,7 @@ public class UserInterface {
 			cnfe.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Orchestrates the whole process. Calls the appropriate method for the
 	 * different functionalities.
@@ -337,7 +401,7 @@ public class UserInterface {
 			}
 		}
 	}
-	
+
 	/**
 	 * The method to start the application. Simply calls process().
 	 * 
