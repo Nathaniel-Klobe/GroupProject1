@@ -84,10 +84,6 @@ public class Business implements Serializable {
 			return QUANTITY_ERROR;
 		}
 
-		if (component == null) {
-			return COMPONENT_NOT_FOUND;
-		}
-
 		component.setQuantity(component.getQuantity() - quantity);
 
 		return OPERATION_COMPLETED;
@@ -116,6 +112,8 @@ public class Business implements Serializable {
 			return ORDER_ALREADY_FULFILLED;
 		}
 
+		Component component = componentCatalog.search(order.getComponentId());
+		component.setQuantity(component.getQuantity() - order.getQuantity());
 		order.setFulfilled(true);
 
 		return OPERATION_COMPLETED;

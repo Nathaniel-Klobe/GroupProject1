@@ -42,8 +42,8 @@ public class UserInterface {
 			retrieve();
 		} else {
 			business = Business.instance();
-			if (yesOrNo("Do you want to generate a test bed an invooked the functionality using asserts?")) {
-				// new AutomatedTester(business);
+			if (yesOrNo("Do you want to generate a test bed and invoke the functionality using asserts?")) {
+				new AutomatedTester(business);
 			}
 		}
 	}
@@ -161,13 +161,15 @@ public class UserInterface {
 	 * Method for adding components
 	 */
 	public void addComponent() {
-		String name = getToken("Enter component name");
 		Component result;
-		result = Business.instance().addComponent(name);
-		if (result == null) {
-			System.out.println("Could not add component");
-		}
-		System.out.println(result);
+		do {
+			String name = getToken("Enter component name");
+			result = Business.instance().addComponent(name);
+			if (result == null) {
+				System.out.println("Could not add component");
+			}
+			System.out.println(result);
+		} while (yesOrNo("Add more Components?"));
 	}
 
 	/*
@@ -175,13 +177,15 @@ public class UserInterface {
 	 */
 
 	public void addSupplier() {
-		String name = getToken("Enter supplier name");
 		Supplier result;
-		result = Business.instance().addSupplier(name);
-		if (result == null) {
-			System.out.println("Could not add supplier");
-		}
-		System.out.println(result);
+		do {
+			String name = getToken("Enter supplier name");
+			result = Business.instance().addSupplier(name);
+			if (result == null) {
+				System.out.println("Could not add supplier");
+			}
+			System.out.println(result);
+		} while (yesOrNo("Add more Suppliers?"));
 	}
 
 	/*
@@ -321,7 +325,7 @@ public class UserInterface {
 	 * 
 	 */
 	private void save() {
-		if (business.save()) {
+		if (Business.save()) {
 			System.out.println(" The Business has been successfully saved in the file BusinessData \n");
 		} else {
 			System.out.println(" There has been an error in saving \n");
