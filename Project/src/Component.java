@@ -84,7 +84,7 @@ public class Component implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.getId() + " " + this.getName() + "\n";
+		return "ID:" + this.getId() + " " + this.getName() + " Quantity: " + this.getQuantity() + "\n";
 	}
 
 }
