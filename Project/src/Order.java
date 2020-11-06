@@ -10,7 +10,7 @@ public class Order implements Serializable {
 	private int quantity;
 	private boolean fulfilled;
 
-	public Order(int supplierId, int componentId, int quantity) {
+	public Order(int componentId, int supplierId, int quantity) {
 		this.setSupplierId(supplierId);
 		this.setComponentId(componentId);
 		this.setQuantity(quantity);
@@ -51,10 +51,7 @@ public class Order implements Serializable {
 	}
 
 	public void setQuantity(int quantity) {
-		if (quantity > 0) {
-			this.quantity = quantity;
-		}
-		// throw error
+		this.quantity = quantity;
 	}
 
 	public void setFulfilled(boolean fulfilled) {

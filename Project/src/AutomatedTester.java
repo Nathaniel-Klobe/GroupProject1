@@ -54,9 +54,9 @@ public class AutomatedTester {
 			assert business.fulfillOrder(orders[0].getOrderId()) == 6;
 
 			System.out.println("All automated tests passed.");
-		} catch (Exception e) {
+		} catch (AssertionError ae) {
 			System.out.println("One or more automated tests failed.");
-			e.printStackTrace();
+			ae.printStackTrace();
 		}
 
 	}
