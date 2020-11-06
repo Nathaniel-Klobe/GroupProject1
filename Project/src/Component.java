@@ -1,3 +1,12 @@
+
+/**
+ * This class creates the Component object of the Business.
+ * Methods: getId, getName, setName, setId, getQuantity, setQuantity, addSupplier, 
+ * removeSupplier, getSuppliers, equals, and toString.
+ * 
+ * @authors Jonathan Bracamontes, Anou Keohavong, Nathaniel Klobe, and Christopher Pellegrino
+ */
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,6 +53,12 @@ public class Component implements Serializable {
 		this.quantity = quantity;
 	}
 
+	/**
+	 * This method adds a supplier to the ArrayList if not already contained.
+	 * 
+	 * @param supplier
+	 * @return boolean
+	 */
 	public boolean addSupplier(Supplier supplier) {
 		if (!this.suppliers.contains(supplier)) {
 			this.suppliers.add(supplier);
@@ -53,6 +68,12 @@ public class Component implements Serializable {
 		return false;
 	}
 
+	/**
+	 * This method removes the supplier as long as it's included in ArrayList.
+	 * 
+	 * @param supplier
+	 * @return boolean
+	 */
 	public boolean removeSupplier(Supplier supplier) {
 		if (this.suppliers.contains(supplier)) {
 			this.suppliers.remove(supplier);
@@ -62,10 +83,18 @@ public class Component implements Serializable {
 		return false;
 	}
 
+	/**
+	 * This method returns the iterator for suppliers.
+	 */
 	public Iterator<Supplier> getSuppliers() {
 		return suppliers.iterator();
 	}
 
+	/**
+	 * Equals method for the component class.
+	 * 
+	 * @return boolean
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -82,6 +111,9 @@ public class Component implements Serializable {
 		return Objects.equals(this.name, component.getName()) && Objects.equals(this.id, component.getId());
 	}
 
+	/**
+	 * toString for the component class.
+	 */
 	@Override
 	public String toString() {
 		return "ID:" + this.getId() + " " + this.getName() + " Quantity: " + this.getQuantity() + "\n";
