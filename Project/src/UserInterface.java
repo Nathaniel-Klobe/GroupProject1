@@ -349,7 +349,7 @@ public class UserInterface {
 	private void retrieve() {
 		try {
 			if (business == null) {
-				Business.retreive();
+				business = Business.retreive();
 				if (business != null) {
 					System.out.println(" The business has been successfully retrieved from the file BusinessData \n");
 				} else {
