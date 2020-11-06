@@ -16,6 +16,11 @@ public class IdServer implements Serializable {
 		this.orderId = 1;
 	}
 
+	/**
+	 * Supports the singleton pattern
+	 * 
+	 * @return The instance of the id server
+	 */
 	public static IdServer instance() {
 		if (server == null) {
 			return (server = new IdServer());
@@ -24,18 +29,38 @@ public class IdServer implements Serializable {
 		}
 	}
 
+	/**
+	 * Get the next component id.
+	 * 
+	 * @return The int id.
+	 */
 	public int getComponentId() {
 		return this.componentId++;
 	}
 
+	/**
+	 * Get the next supplier id.
+	 * 
+	 * @return the int id.
+	 */
 	public int getSupplierId() {
 		return this.supplierId++;
 	}
 
+	/**
+	 * Get the next order id.
+	 * 
+	 * @return the int it
+	 */
 	public int getOrderId() {
 		return this.orderId++;
 	}
 
+	/**
+	 * Retrieve a saved copy of an instance id
+	 * 
+	 * @param input The objectstream of the saved idServer.
+	 */
 	public static void retrieve(ObjectInputStream input) {
 		try {
 			server = (IdServer) input.readObject();

@@ -1,10 +1,10 @@
 
-/*
+/**
  * Group Project 1
- * Nate Klobe
- * Christopher Pellegrino
- * Jonathan Bracamontes
- * Anou Keohavong
+ * @author Nate Klobe
+ * @author Christopher Pellegrino
+ * @author Jonathan Bracamontes
+ * @author Anou Keohavong
  * 
  * User Interface
  */
@@ -33,7 +33,7 @@ public class UserInterface {
 	private static final int SAVE = 12;
 	private static final int HELP = 13;
 
-	/*
+	/**
 	 * Private for singleton pattern. Conditionally looks for any saved data.
 	 * Otherwise, it gets a singleton Business object.
 	 */
@@ -48,7 +48,7 @@ public class UserInterface {
 		}
 	}
 
-	/*
+	/**
 	 * Supports the singleton pattern
 	 * 
 	 * @return the singleton object
@@ -157,8 +157,8 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-	/*
-	 * Method for adding components
+	/**
+	 * Add a component to the business
 	 */
 	public void addComponent() {
 		Component result;
@@ -172,10 +172,9 @@ public class UserInterface {
 		} while (yesOrNo("Add more Components?"));
 	}
 
-	/*
-	 * method for adding suppliers
+	/**
+	 * Add a supplier to the business
 	 */
-
 	public void addSupplier() {
 		Supplier result;
 		do {
@@ -188,11 +187,9 @@ public class UserInterface {
 		} while (yesOrNo("Add more Suppliers?"));
 	}
 
-	/*
-	 * method to add Compnent Supplier. Prompts user for Component id and supplier
-	 * id.
+	/**
+	 * Associate a component with a supplier
 	 */
-
 	public void addComponentSupplier() {
 		int componentID = getNumber("Enter component id");
 		int supplierID = getNumber("Enter supplier id");
@@ -216,7 +213,6 @@ public class UserInterface {
 	 * Method to update quanity of a component. Prompts user for component ID and
 	 * quantity.
 	 */
-
 	private void assignComponent() {
 		int componentID = getNumber("Enter component id");
 		int quantity = getNumber("Enter the quantity");
@@ -236,7 +232,7 @@ public class UserInterface {
 		}
 	}
 
-	/*
+	/**
 	 * Method to place orders. Prompts user for component id, quantity, and supplier
 	 * id.
 	 */
@@ -252,6 +248,10 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Mark the status of a pending order as fulfilled. Prompts the user from an
+	 * order id.
+	 */
 	private void fulfillOrder() {
 		int orderID = getNumber("Enter order id");
 		int result = business.fulfillOrder(orderID);
@@ -271,7 +271,7 @@ public class UserInterface {
 
 	}
 
-	/*
+	/**
 	 * List a component. The user enters a component id. If the component id is
 	 * valid, the system displays all the information related to the component,
 	 * including the names of suppliers for that component. Otherwise, it displays
@@ -297,6 +297,9 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Display all of the outstanding orders in the business
+	 */
 	private void displayOutStandingOrders() {
 		Iterator orders = business.displayOutstandingOrders();
 		while (orders.hasNext()) {
@@ -304,6 +307,9 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Display all of the components in the business
+	 */
 	private void displayComponents() {
 		Iterator components = business.displayComponents();
 		while (components.hasNext()) {
@@ -312,6 +318,9 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Display all of the suppliers in the business
+	 */
 	private void displaySuppliers() {
 		Iterator suppliers = business.displaySuppliers();
 		while (suppliers.hasNext()) {
@@ -412,7 +421,7 @@ public class UserInterface {
 	 * @param args not used
 	 */
 	public static void main(String[] args) {
-		UserInterface.instance().process();
+		UserInterface.instance().process(); // instantiate the interface.
 	}
 
 }
