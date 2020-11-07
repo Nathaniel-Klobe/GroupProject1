@@ -1,3 +1,12 @@
+
+/**
+ * This class creates the Order object of the Business.
+ * Methods: getOrderId, getSupplierId, getComponentId, getQuantity, getFullfilled, setOrderId, 
+ * setSupplierId, setComponentId, setQuantity, setFulfilled, equals, and toString.
+ * 
+ * @authors Jonathan Bracamontes, Anou Keohavong, Nathaniel Klobe, and Christopher Pellegrino
+ */
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -58,6 +67,9 @@ public class Order implements Serializable {
 		this.fulfilled = fulfilled;
 	}
 
+	/**
+	 * equals method for the order class.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -78,6 +90,9 @@ public class Order implements Serializable {
 				&& Objects.equals(this.fulfilled, order.getFullfilled());
 	}
 
+	/**
+	 * toString method for the order class.
+	 */
 	public String toString() {
 
 		return "ComponentId: " + this.componentId + " SupplierId: " + this.supplierId + " OrderId: " + this.orderId
